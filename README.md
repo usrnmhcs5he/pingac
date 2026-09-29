@@ -1,85 +1,86 @@
-# Bash LAN IP Scanner
+## 📡 pingac
 
-A fast, lightweight Bash script to scan a range of IP addresses on a local network and identify active hosts using ICMP ping.
+**A tiny interactive Bash script that ping-sweeps a range of IP addresses on your LAN and lists the hosts that respond.**
 
-Version 11
+[![Bash](https://img.shields.io/badge/bash-3.2%2B-4EAA25?logo=gnubash&logoColor=white)](ping.sh)
+[![ICMP](https://img.shields.io/badge/ping-ICMP-blue)](ping.sh)
+[![Version](https://img.shields.io/badge/version-11-blue)](ping.sh)
 
----
+One script, no dependencies, no config files.
 
-Features
-- Interactive prompts with sensible defaults
-- Real-time visual progress bar with percentage
-- Scans any custom IP range (e.g. 192.168.1.1 – 192.168.1.254)
-- Saves all active IPs to active_ips.txt
-- Clean final summary with list of responding devices
-- No external dependencies
+## ✨ Features
 
----
+- **Interactive prompts** with sensible defaults (`192.168.0.` / `2` / `254`).
+- **Live progress bar** with the current address and a percentage.
+- **Custom ranges**: sweep any `/24`-style span, e.g. `192.168.1.1` to `192.168.1.254`.
+- **Input validation**: start and end must be numbers and start must not exceed end.
+- **Saved results**: active hosts are written to `active_ips.txt`.
+- **Clear summary**: responding IPs are listed once the scan finishes.
 
-Requirements
-- Linux or macOS with Bash
-- ping command (standard on most systems)
+## 📦 Prerequisites
 
-⚠️ Legal Notice: Unauthorized network scanning may be illegal. Use this tool responsibly and only on networks you own or have explicit permission to scan.
+| Need | For |
+|------|-----|
+| Bash | Running the script (Linux, macOS) |
+| `ping` | Probing hosts (standard on most systems) |
 
----
+> **Note**: the script uses `ping -W1`, a 1-second timeout on Linux. macOS interprets `-W` as milliseconds, so slower hosts may be missed there.
 
-Installation
+## 🚀 Quick start
 
-1. Clone the repository:
-   git clone https://github.com/yourusername/bash-ip-scanner.git
-   cd bash-ip-scanner
+```bash
+git clone https://github.com/usrnmhcs5he/pingac.git
+cd pingac
+chmod +x ping.sh
+./ping.sh
+```
 
-2. Make the script executable:
-   chmod +x ip_scanner.sh
+The guided flow:
 
-3. Run the script:
-   ./ip_scanner.sh
+```
+base IP prefix → start of range → end of range → scan → summary
+```
 
----
+Example session:
 
-Usage
+```
+Base IP prefix (e.g., 192.168.0.): 192.168.1.
+Start range (e.g., 2): 1
+End range (e.g., 254): 100
+Pinging 192.168.1.100: [##################################################] 100%
+Scan complete. Active IPs saved to active_ips.txt.
+Responding IPs:
+192.168.1.1
+192.168.1.23
+```
 
-Simply execute the script and answer the three prompts:
+Press Enter at any prompt to accept its default.
 
-   ./ip_scanner.sh
+## 📁 Output
 
-Example input:
-- Base IP prefix (e.g., 192.168.0.): 192.168.1.
-- Start range (e.g., 2): 1
-- End range (e.g., 254): 100
+`active_ips.txt` is created in the current directory and **overwritten on every run**. It contains one line per responding host:
 
-The script will display a live progress bar while scanning.
+```
+192.168.1.1 is active
+192.168.1.23 is active
+```
 
----
+## 🔧 How it works
 
-Output
+Each address in the range is pinged once (`ping -c1 -W1`). Hosts that answer are appended to `active_ips.txt` and collected for the final summary, while a 50-character progress bar tracks the sweep.
 
-- Active IPs are saved to active_ips.txt (file is overwritten on each run)
-- Terminal shows a progress bar, scan completion message, and final list of responding IPs
+A silent host is not necessarily offline: some devices and firewalls drop ICMP echo requests.
 
----
+## ⚠️ Legal notice
 
-How It Works
+Unauthorized network scanning may be illegal. Use this tool only on networks you own or have explicit permission to scan.
 
-The script prompts for a base IP prefix and numeric range, then pings each address once with a 1-second timeout. It displays a real-time ASCII progress bar and collects all hosts that respond.
+## 🕘 Changelog
 
----
+| Version | Changes |
+|---------|---------|
+| **11** | Improved progress bar, better input validation, cleaner output, more user-friendly defaults. |
 
-Version
-
-Version 11 – Improved progress bar, better input validation, cleaner output, and more user-friendly defaults.
-
----
-
-License
+## 📄 License
 
 MIT License
-
----
-
-Disclaimer
-
-This tool is provided for educational and legitimate network troubleshooting purposes only. The author is not responsible for any misuse or damage caused by this script.
-
----
