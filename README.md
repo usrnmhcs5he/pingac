@@ -83,4 +83,4 @@ Unauthorized network scanning may be illegal. Use this tool only on networks you
 
 ## 📄 License
 
-MIT License
+MIT. See [LICENSE](LICENSE).
